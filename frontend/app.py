@@ -32,15 +32,16 @@ st.markdown(
     '''
     <style>
         body {
-            background: linear-gradient(135deg, #e0e7ff 0%, #f5f7fa 100%);
+            background: linear-gradient(135deg, #232946 0%, #16161a 100%) !important;
         }
         .main > div {
             padding: 2.5rem 2rem;
             border-radius: 18px;
-            background: #fff;
-            box-shadow: 0 8px 32px rgba(44, 62, 80, 0.07);
+            background: rgba(34, 39, 57, 0.92);
+            box-shadow: 0 8px 32px rgba(44, 62, 80, 0.13);
             max-width: 700px;
             margin: 2rem auto;
+            border: 1.5px solid #393e5c;
         }
         .phishguard-header {
             display: flex;
@@ -51,69 +52,106 @@ st.markdown(
         .phishguard-logo {
             width: 56px;
             border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
+            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.18);
         }
         h1, h2, h3, .stMarkdown h1, .stMarkdown h2 {
             font-family: 'Inter', 'Quicksand', sans-serif !important;
-            color: #1a237e;
+            color: #fafaff;
             letter-spacing: -0.5px;
         }
         .stTextInput input, .stTextArea textarea {
-            background: #f4f6fb;
+            background: #232946;
             border-radius: 8px;
-            border: 1.5px solid #c3dafe;
+            border: 1.5px solid #5a5f7a;
             font-size: 1.1rem;
             padding: 0.75rem;
-            color: #1a237e;
+            color: #fafaff;
+        }
+        .stTextInput input::placeholder, .stTextArea textarea::placeholder {
+            color: #a8a8b3;
+            opacity: 1;
         }
         .stButton>button {
             width: 100%;
             padding: 0.75rem;
             border-radius: 8px;
-            background: linear-gradient(90deg, #6366f1 0%, #0ea5e9 100%);
+            background: linear-gradient(90deg, #7f5af0 0%, #2cb67d 100%);
             color: white;
             font-weight: 600;
             font-size: 1.1rem;
-            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
+            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.20);
             transition: background 0.2s;
+            border: none;
         }
         .stButton>button:hover {
-            background: linear-gradient(90deg, #0ea5e9 0%, #6366f1 100%);
+            background: linear-gradient(90deg, #2cb67d 0%, #7f5af0 100%);
         }
         .phishguard-risk-card {
-            background: linear-gradient(90deg, #f3e8ff 0%, #e0f2fe 100%);
+            background: linear-gradient(90deg, #232946 0%, #393e5c 100%);
             padding: 28px 24px;
             border-radius: 16px;
-            box-shadow: 0 4px 16px #e0e7ff;
+            box-shadow: 0 4px 16px #232946;
             margin-bottom: 28px;
-            border: 1.5px solid #c3dafe;
+            border: 1.5px solid #393e5c;
         }
         .risk-high {
-            color: #e11d48;
+            color: #ff3864;
             font-weight: bold;
             font-size: 1.15rem;
         }
         .risk-low {
-            color: #059669;
+            color: #2cb67d;
             font-weight: bold;
             font-size: 1.15rem;
         }
         .stMetric {
-            background: #f4f6fb;
+            background: #16161a;
             border-radius: 10px;
             padding: 1rem;
             margin: 0.5rem 0;
+            color: #fafaff;
         }
         .stExpanderHeader {
             font-size: 1.1rem;
             font-weight: 600;
-            color: #6366f1;
+            color: #7f5af0;
         }
         .stAlert, .stSuccess, .stError {
             border-radius: 10px;
         }
+        /* Animated Gradient Border */
+        .main > div {
+            position: relative;
+            overflow: hidden;
+        }
+        .main > div:before {
+            content: '';
+            position: absolute;
+            top: -4px; left: -4px; right: -4px; bottom: -4px;
+            z-index: 0;
+            background: conic-gradient(from 90deg, #7f5af0, #2cb67d, #7f5af0, #232946);
+            filter: blur(12px);
+            opacity: 0.45;
+            border-radius: 22px;
+            animation: borderSpin 7s linear infinite;
+        }
+        .main > div > * { position: relative; z-index: 1; }
+        @keyframes borderSpin {
+            0% { filter: blur(14px) hue-rotate(0deg); }
+            100% { filter: blur(14px) hue-rotate(360deg); }
+        }
+        /* Animated logo float */
+        .phishguard-logo {
+            animation: floatLogo 3.5s ease-in-out infinite;
+        }
+        @keyframes floatLogo {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
     </style>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.lordicon.com/lordicon.js"></script>
     ''',
     unsafe_allow_html=True
 )
@@ -219,11 +257,19 @@ def display_results(analysis: dict):
 
 def display_home_page():
     st.title("🛡️ PhishGuard - Your Email Bodyguard")
-    st.subheader("Let's Check If That Email Is Legit!")
     st.markdown("""
-    <div style='font-size:1.15rem; color:#475569; margin-bottom:2.5rem;'>
+    <div style='display:flex;align-items:center;gap:1rem;margin-bottom:1.5rem;'>
+        <lord-icon
+            src="https://cdn.lordicon.com/tdrtiskw.json"
+            trigger="loop"
+            colors="primary:#7f5af0,secondary:#2cb67d"
+            style="width:48px;height:48px;">
+        </lord-icon>
+        <span style='font-size:2rem;font-family:Inter,Quicksand,sans-serif;font-weight:700;color:#fafaff;'>PhishGuard</span>
+    </div>
+    <div style='font-size:1.22rem; color:#a8a8b3; margin-bottom:2.5rem;'>
         Paste a suspicious email below. PhishGuard will analyze it for <b>phishing risks</b> and highlight any red flags.<br>
-        <span style='color:#6366f1;'>Your privacy is protected – we never store your emails.</span>
+        <span style='color:#2cb67d;'>Your privacy is protected – we never store your emails.</span>
     </div>
     """, unsafe_allow_html=True)
     
@@ -247,7 +293,7 @@ def display_home_page():
                         st.markdown(
                             f"""
                             <div class='phishguard-risk-card'>
-                                <h3 style='color:#d9534f;'>Risk Score: {analysis.get('confidence', 'N/A')}</h3>
+                                <h3 style='color:#2cb67d;'>Risk Score: {analysis.get('confidence', 'N/A')}</h3>
                                 <p>{analysis.get('summary', '')}</p>
                             </div>
                             """,
@@ -256,6 +302,18 @@ def display_home_page():
                         display_results(analysis)
                         st.balloons()
                         st.success("Analysis complete! Stay safe out there 🚀")
+                        st.markdown("""
+                        <div style='text-align:center;margin-top:1.5rem;'>
+                            <lord-icon
+                                src='https://cdn.lordicon.com/tdrtiskw.json'
+                                trigger='morph'
+                                colors='primary:#2cb67d,secondary:#7f5af0'
+                                style='width:64px;height:64px;'>
+                            </lord-icon>
+                            <div style='color:#fafaff;font-size:1.18rem;font-weight:600;margin-top:0.5rem;'>No threats found! Your email is safe.</div>
+                        </div>
+                        """, unsafe_allow_html=True)
+                        st.session_state.pop("user", None)
             else:
                 st.warning("Please fill in <b>all</b> fields above to analyze the email.", unsafe_allow_html=True)
     
