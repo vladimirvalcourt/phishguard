@@ -52,6 +52,35 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
+# Custom CSS for UI Polish
+st.markdown(
+    '''
+    <style>
+        #MainMenu {visibility: hidden;}
+        footer {visibility: hidden;}
+        .css-1d391kg {padding-top: 2rem;}
+        .phishguard-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .phishguard-logo {
+            width: 48px;
+            border-radius: 10px;
+        }
+        .phishguard-risk-card {
+            background: #fffbe6;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px #f0f0f0;
+            margin-bottom: 20px;
+        }
+    </style>
+    ''',
+    unsafe_allow_html=True
+)
+
 # API endpoint
 API_URL = "http://localhost:8001"
 
@@ -151,20 +180,18 @@ def display_results(analysis: dict):
         - Offering too-good-to-be-true deals
         """)
 
-
 def display_home_page():
     st.title("🛡️ PhishGuard - Your Email Bodyguard")
     st.subheader("Let's Check If That Email Is Legit!")
     
-    # Check if user is logged in
-    if "token" not in st.session_state:
-        st.warning("Please log in to analyze emails")
-        st.info("Free tier: 5 scans/month | Pro tier: $9/month for unlimited scans")
-        
-        if st.button("Login / Register"):
-            st.session_state["page"] = "login"
-            st.experimental_rerun()
-        return
+    # Check if user is logged in (DISABLED FOR TESTING)
+    # if "token" not in st.session_state:
+    #     st.warning("Please log in to analyze emails")
+    #     st.info("Free tier: 5 scans/month | Pro tier: $9/month for unlimited scans")
+    #     if st.button("Login / Register"):
+    #         st.session_state["page"] = "login"
+    #         st.experimental_rerun()
+    #     return
     
     # Get user subscription status
     user = st.session_state.get("user", {})
@@ -214,8 +241,17 @@ def display_home_page():
             if sender and subject and body:
                 with st.spinner("🕵️ Looking for anything suspicious..."):
                     # Add token to request
-                    analysis = analyze_email(subject, body, sender, st.session_state["token"])
+                    analysis = analyze_email(subject, body, sender, st.session_state.get("token", None))
                     if analysis:
+                        st.markdown(
+                            f"""
+                            <div class='phishguard-risk-card'>
+                                <h3 style='color:#d9534f;'>Risk Score: {analysis.get('confidence', 'N/A')}</h3>
+                                <p>{analysis.get('summary', '')}</p>
+                            </div>
+                            """,
+                            unsafe_allow_html=True
+                        )
                         display_results(analysis)
                         
                         # Update user info after scan
@@ -246,43 +282,36 @@ def main():
     
     # Create sidebar for navigation
     with st.sidebar:
-        st.title("🛡️ PhishGuard")
-        st.subheader("Navigation")
-        
-        # Home button
+        st.markdown("""
+        <div class='phishguard-header'>
+            <img src='https://raw.githubusercontent.com/vladimirvalcourt/phishguard/main/frontend/dashboard/phishguard-logo.png' class='phishguard-logo' alt='PhishGuard Logo' />
+            <div>
+                <h2 style='margin-bottom:0;'>PhishGuard</h2>
+                <span style='font-size:0.9rem;color:#888;'>AI-powered email security</span>
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+        st.divider()
+        st.title("Navigation")
         if st.button("🏠 Home"):
             st.session_state["page"] = "home"
             st.experimental_rerun()
-        
-        # Show different options based on login status
-        if "token" in st.session_state:
-            if st.button("👤 My Profile"):
-                st.session_state["page"] = "profile"
-                st.experimental_rerun()
-                
-            if st.button("💳 Subscription"):
-                st.session_state["page"] = "subscription"
-                st.experimental_rerun()
-                
-            if st.button("🚪 Logout"):
-                # Clear session state
-                for key in list(st.session_state.keys()):
-                    del st.session_state[key]
-                st.experimental_rerun()
-        else:
-            if st.button("🔑 Login / Register"):
-                st.session_state["page"] = "login"
-                st.experimental_rerun()
-    
+        # Optionally add History button if you have a history page
+        # if st.button("📜 History"):
+        #     st.session_state["page"] = "history"
+        #     st.experimental_rerun()
+
     # Display the appropriate page based on navigation state
     if st.session_state["page"] == "home":
         display_home_page()
-    elif st.session_state["page"] == "login":
-        display_login_page()
-    elif st.session_state["page"] == "profile":
-        display_user_profile()
-    elif st.session_state["page"] == "subscription":
-        display_subscription_page()
+    # elif st.session_state["page"] == "history":
+    #     display_history_page()  # Only if you have this implemented
+    # elif st.session_state["page"] == "login":
+    #     display_login_page()
+    # elif st.session_state["page"] == "profile":
+    #     display_user_profile()
+    # elif st.session_state["page"] == "subscription":
+    #     display_subscription_page()
 
 if __name__ == "__main__":
     main()
