@@ -10,7 +10,7 @@ from datetime import datetime
 # Import our custom modules
 from frontend.auth import display_login_page, display_user_profile
 from frontend.subscription import display_subscription_page
-from frontend.themes.theme_selector import display_theme_selector, apply_selected_theme
+from frontend.themes.theme_selector import display_theme_selector, apply_selected_theme, initialize_theme_selector
 
 # Configure the page
 st.set_page_config(
@@ -20,7 +20,8 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Apply the selected theme
+# Initialize theme in session state before applying
+initialize_theme_selector()
 apply_selected_theme()
 
 # Display theme selector in sidebar
