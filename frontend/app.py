@@ -157,7 +157,7 @@ st.markdown(
 )
 
 # API endpoint
-API_URL = "http://localhost:8001"
+API_URL = "https://phishguard-mcuv.onrender.com"
 
 def analyze_email(subject: str, body: str, sender: str, token: str = None) -> dict:
     """Send email content to API for analysis."""

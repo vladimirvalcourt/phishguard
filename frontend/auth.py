@@ -9,7 +9,7 @@ from datetime import datetime
 from shared.logger import logger
 
 # API endpoint
-API_URL = "http://localhost:8001"
+API_URL = "https://phishguard-mcuv.onrender.com"
 
 def register_user(email, password):
     """Register a new user"""
