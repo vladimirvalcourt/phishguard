@@ -8,9 +8,9 @@ import json
 from datetime import datetime
 
 # Import our custom modules
-from auth import display_login_page, display_user_profile
-from subscription import display_subscription_page
-from themes.theme_selector import display_theme_selector, apply_selected_theme
+from frontend.auth import display_login_page, display_user_profile
+from frontend.subscription import display_subscription_page
+from frontend.themes.theme_selector import display_theme_selector, apply_selected_theme
 
 # Configure the page
 st.set_page_config(
