@@ -27,56 +27,93 @@ apply_selected_theme()
 # Display theme selector in sidebar
 display_theme_selector()
 
-# Additional custom CSS for theme-independent styles
-st.markdown("""
-<style>
-    .main > div {
-        padding: 2rem;
-        border-radius: 10px;
-        background: #f8f9fa;
-    }
-    .stButton>button {
-        width: 100%;
-        padding: 0.5rem;
-        background-color: #0d6efd;
-        color: white;
-    }
-    .risk-high {
-        color: #dc3545;
-        font-weight: bold;
-    }
-    .risk-low {
-        color: #198754;
-        font-weight: bold;
-    }
-</style>
-""", unsafe_allow_html=True)
-
-# Custom CSS for UI Polish
+# --- Million Dollar SaaS UI Polish ---
 st.markdown(
     '''
     <style>
-        #MainMenu {visibility: hidden;}
-        footer {visibility: hidden;}
-        .css-1d391kg {padding-top: 2rem;}
+        body {
+            background: linear-gradient(135deg, #e0e7ff 0%, #f5f7fa 100%);
+        }
+        .main > div {
+            padding: 2.5rem 2rem;
+            border-radius: 18px;
+            background: #fff;
+            box-shadow: 0 8px 32px rgba(44, 62, 80, 0.07);
+            max-width: 700px;
+            margin: 2rem auto;
+        }
         .phishguard-header {
             display: flex;
             align-items: center;
-            gap: 1rem;
-            margin-bottom: 1rem;
+            gap: 1.25rem;
+            margin-bottom: 2rem;
         }
         .phishguard-logo {
-            width: 48px;
-            border-radius: 10px;
+            width: 56px;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
+        }
+        h1, h2, h3, .stMarkdown h1, .stMarkdown h2 {
+            font-family: 'Inter', 'Quicksand', sans-serif !important;
+            color: #1a237e;
+            letter-spacing: -0.5px;
+        }
+        .stTextInput input, .stTextArea textarea {
+            background: #f4f6fb;
+            border-radius: 8px;
+            border: 1.5px solid #c3dafe;
+            font-size: 1.1rem;
+            padding: 0.75rem;
+            color: #1a237e;
+        }
+        .stButton>button {
+            width: 100%;
+            padding: 0.75rem;
+            border-radius: 8px;
+            background: linear-gradient(90deg, #6366f1 0%, #0ea5e9 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+            box-shadow: 0 2px 8px rgba(44, 62, 80, 0.10);
+            transition: background 0.2s;
+        }
+        .stButton>button:hover {
+            background: linear-gradient(90deg, #0ea5e9 0%, #6366f1 100%);
         }
         .phishguard-risk-card {
-            background: #fffbe6;
-            padding: 20px;
+            background: linear-gradient(90deg, #f3e8ff 0%, #e0f2fe 100%);
+            padding: 28px 24px;
+            border-radius: 16px;
+            box-shadow: 0 4px 16px #e0e7ff;
+            margin-bottom: 28px;
+            border: 1.5px solid #c3dafe;
+        }
+        .risk-high {
+            color: #e11d48;
+            font-weight: bold;
+            font-size: 1.15rem;
+        }
+        .risk-low {
+            color: #059669;
+            font-weight: bold;
+            font-size: 1.15rem;
+        }
+        .stMetric {
+            background: #f4f6fb;
             border-radius: 10px;
-            box-shadow: 0 2px 8px #f0f0f0;
-            margin-bottom: 20px;
+            padding: 1rem;
+            margin: 0.5rem 0;
+        }
+        .stExpanderHeader {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #6366f1;
+        }
+        .stAlert, .stSuccess, .stError {
+            border-radius: 10px;
         }
     </style>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet">
     ''',
     unsafe_allow_html=True
 )
@@ -183,64 +220,28 @@ def display_results(analysis: dict):
 def display_home_page():
     st.title("🛡️ PhishGuard - Your Email Bodyguard")
     st.subheader("Let's Check If That Email Is Legit!")
-    
-    # Check if user is logged in (DISABLED FOR TESTING)
-    # if "token" not in st.session_state:
-    #     st.warning("Please log in to analyze emails")
-    #     st.info("Free tier: 5 scans/month | Pro tier: $9/month for unlimited scans")
-    #     if st.button("Login / Register"):
-    #         st.session_state["page"] = "login"
-    #         st.experimental_rerun()
-    #     return
-    
-    # Get user subscription status
-    user = st.session_state.get("user", {})
-    subscription = user.get("subscription", {})
-    
-    # Display subscription info
-    col1, col2 = st.columns(2)
-    with col1:
-        st.markdown(f"**Plan:** {subscription.get('plan', 'Free').capitalize()}")
-    with col2:
-        if subscription.get('plan') == "free":
-            st.markdown(f"**Scans remaining:** {subscription.get('scans_remaining', 0)}/{subscription.get('scan_limit', 5)}")
-        else:
-            st.markdown("**Scans remaining:** Unlimited")
-    
     st.markdown("""
-    Hey there! 👋 Got an email that seems a bit off? Drop it below and I'll help you figure out 
-    if it's real or trying to trick you. I'm like your personal email detective! 🔍
-    """)
-    
-    # Check if user can perform a scan
-    can_scan = subscription.get('scans_remaining', 0) > 0 or subscription.get('plan') == "pro"
-    
-    if not can_scan:
-        # st.error("You've reached your monthly scan limit. Upgrade to Pro for unlimited scans!")
-        # if st.button("Upgrade to Pro"):
-        #     st.info("Pro upgrade coming soon!")
-        # TODO: Re-enable this when Pro tier is available
-        pass
+    <div style='font-size:1.15rem; color:#475569; margin-bottom:2.5rem;'>
+        Paste a suspicious email below. PhishGuard will analyze it for <b>phishing risks</b> and highlight any red flags.<br>
+        <span style='color:#6366f1;'>Your privacy is protected – we never store your emails.</span>
+    </div>
+    """, unsafe_allow_html=True)
     
     with st.form("email_analysis_form"):
         col1, col2 = st.columns(2)
         with col1:
-            sender = st.text_input("📧 Who's it from?", placeholder="paste the sender's email here")
+            sender = st.text_input("📧 Sender Email", placeholder="e.g. ceo@company.com")
         with col2:
-            subject = st.text_input("📝 What's it about?", placeholder="paste the subject line here")
-        
+            subject = st.text_input("📝 Subject", placeholder="e.g. Urgent: Account Verification Needed")
         body = st.text_area(
-            "📄 What does the email say?",
-            placeholder="Copy and paste the whole email message here...",
-            height=200
+            "📄 Email Content",
+            placeholder="Paste the full email message here...",
+            height=220
         )
-        
-        submitted = st.form_submit_button("Analyze Email")
-        
+        submitted = st.form_submit_button("🔍 Analyze Email")
         if submitted:
             if sender and subject and body:
-                with st.spinner("🕵️ Looking for anything suspicious..."):
-                    # Add token to request
+                with st.spinner("🕵️‍♂️ Scanning for phishing signals..."):
                     analysis = analyze_email(subject, body, sender, st.session_state.get("token", None))
                     if analysis:
                         st.markdown(
@@ -253,27 +254,27 @@ def display_home_page():
                             unsafe_allow_html=True
                         )
                         display_results(analysis)
-                        
-                        # Update user info after scan
-                        st.session_state.pop("user", None)  # Force refresh of user info on next page load
+                        st.balloons()
+                        st.success("Analysis complete! Stay safe out there 🚀")
             else:
-                st.warning("Oops! Please fill in all the boxes above so I can help you check this email 😊")
+                st.warning("Please fill in <b>all</b> fields above to analyze the email.", unsafe_allow_html=True)
     
-    # Display some tips
     with st.expander("📚 Quick Tips to Spot Fake Emails"):
         st.markdown("""
-        ### 🚩 Red Flags to Watch For:
-        * Oops! Lots of typos and weird grammar
-        * "URGENT!!!" or "Your account will be deleted!"
-        * Email address looks almost right but not quite (like amaz0n.com)
-        * Sketchy links that want you to "verify" something
-        * Asking for passwords or credit card info (legit companies don't do this!)
-        
-        ### 🛡️ Stay Safe:
-        * When in doubt, don't click!
-        * Call the company directly if you're unsure
-        * Trust your gut - if it feels weird, it probably is
-        """)
+        <div style='font-size:1.08rem;'>
+        <b>🚩 Red Flags:</b><br>
+        • Typos, weird grammar, or urgent threats<br>
+        • Sender's address looks off (e.g. amaz0n.com)<br>
+        • Links asking you to verify info<br>
+        • Requests for passwords or payment<br>
+        </div>
+        <div style='font-size:1.08rem; margin-top:0.5rem;'>
+        <b>🛡️ Pro Tips:</b><br>
+        • Don't click suspicious links<br>
+        • Call the company if unsure<br>
+        • Trust your instincts – if it feels weird, it probably is
+        </div>
+        """, unsafe_allow_html=True)
 
 def main():
     # Initialize session state for navigation
@@ -296,22 +297,10 @@ def main():
         if st.button("🏠 Home"):
             st.session_state["page"] = "home"
             st.experimental_rerun()
-        # Optionally add History button if you have a history page
-        # if st.button("📜 History"):
-        #     st.session_state["page"] = "history"
-        #     st.experimental_rerun()
 
     # Display the appropriate page based on navigation state
     if st.session_state["page"] == "home":
         display_home_page()
-    # elif st.session_state["page"] == "history":
-    #     display_history_page()  # Only if you have this implemented
-    # elif st.session_state["page"] == "login":
-    #     display_login_page()
-    # elif st.session_state["page"] == "profile":
-    #     display_user_profile()
-    # elif st.session_state["page"] == "subscription":
-    #     display_subscription_page()
 
 if __name__ == "__main__":
     main()
