@@ -58,13 +58,12 @@ elif nav == "Subscription":
     st.header("Subscription & Billing")
     st.markdown("""
     **Current Plan:** Free (MVP)
-    
-    Upgrade to Pro for unlimited scans and advanced features.
+    # Upgrade to Pro for unlimited scans and advanced features. (REMOVED for MVP)
     """)
-    if st.button("Upgrade to Pro (Stripe Test)"):
-        st.markdown("Redirecting to Stripe checkout...")
-        st.experimental_set_query_params(redirect="stripe")
-        st.markdown("<meta http-equiv='refresh' content='0; url=https://buy.stripe.com/test_4gwcOq9jL1qI4jC4gg' />", unsafe_allow_html=True)
+    # if st.button("Upgrade to Pro (Stripe Test)"):
+    #     st.markdown("Redirecting to Stripe checkout...")
+    #     st.experimental_set_query_params(redirect="stripe")
+    #     st.markdown("<meta http-equiv='refresh' content='0; url=https://buy.stripe.com/test_4gwcOq9jL1qI4jC4gg' />", unsafe_allow_html=True)
     st.info("For demo purposes, this uses Stripe's test environment.")
 
 # --- Recent Analyses Table ---

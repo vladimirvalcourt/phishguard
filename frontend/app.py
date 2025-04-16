@@ -216,11 +216,11 @@ def display_home_page():
     can_scan = subscription.get('scans_remaining', 0) > 0 or subscription.get('plan') == "pro"
     
     if not can_scan:
-        st.error("You've reached your monthly scan limit. Upgrade to Pro for unlimited scans!")
-        if st.button("Upgrade to Pro"):
-            st.session_state["page"] = "subscription"
-            st.experimental_rerun()
-        return
+        # st.error("You've reached your monthly scan limit. Upgrade to Pro for unlimited scans!")
+        # if st.button("Upgrade to Pro"):
+        #     st.info("Pro upgrade coming soon!")
+        # TODO: Re-enable this when Pro tier is available
+        pass
     
     with st.form("email_analysis_form"):
         col1, col2 = st.columns(2)
