@@ -1,0 +1,93 @@
+openapi: 3.0.3
+info:
+  title: PhishGuard API
+  version: 1.0.0
+  description: |
+    This is the OpenAPI specification for the PhishGuard SaaS backend.
+    It documents authentication, multi-tenancy, billing, and phishing detection endpoints.
+servers:
+  - url: http://localhost:8000
+paths:
+  /auth/register:
+    post:
+      summary: Register a new user
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User registered
+        '400':
+          description: Invalid input
+  /auth/login:
+    post:
+      summary: User login
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+        '401':
+          description: Unauthorized
+  /tenant:
+    post:
+      summary: Create a new tenant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+      responses:
+        '201':
+          description: Tenant created
+  /phishing/analyze:
+    post:
+      summary: Analyze an email for phishing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email_content:
+                  type: string
+      responses:
+        '200':
+          description: Analysis result
+  /billing/subscribe:
+    post:
+      summary: Subscribe to a plan
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                plan_id:
+                  type: string
+      responses:
+        '200':
+          description: Subscription successful
